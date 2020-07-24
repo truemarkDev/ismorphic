@@ -68,10 +68,6 @@ const data = [
 ];
 
 export default class Invoice extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     pagination: false,
   };
