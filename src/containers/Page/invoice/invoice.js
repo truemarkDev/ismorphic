@@ -1,86 +1,104 @@
-import React from 'react';
-import { TableViews } from '../../Tables/antTables';
-import Button from '../../../components/uielements/button';
-import InvoicePageWrapper from './invoice.style';
+import React from "react";
+import { TableViews } from "../../Tables/antTables";
+import Button from "../../../components/uielements/button";
+import InvoicePageWrapper from "./invoice.style";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const Table = TableViews.SimpleView;
 const columns = [
   {
-    title: '#',
-    dataIndex: 'index',
-    key: 'index',
-    width: '5%'
+    title: "#",
+    dataIndex: "index",
+    key: "index",
+    width: "5%",
   },
   {
-    title: 'Item Name',
-    dataIndex: 'itemname',
-    key: 'itemname',
-    width: '65%',
-    className: 'itemName'
+    title: "Item Name",
+    dataIndex: "itemname",
+    key: "itemname",
+    width: "65%",
+    className: "itemName",
   },
   {
-    title: 'Costs',
-    dataIndex: 'costs',
-    key: 'costs',
-    width: '10%'
+    title: "Costs",
+    dataIndex: "costs",
+    key: "costs",
+    width: "10%",
   },
   {
-    title: 'Qty',
-    dataIndex: 'quantity',
-    key: 'quantity',
-    width: '10%'
+    title: "Qty",
+    dataIndex: "quantity",
+    key: "quantity",
+    width: "10%",
   },
   {
-    title: 'Price',
-    dataIndex: 'price',
-    key: 'price',
-    width: '10%'
-  }
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    width: "10%",
+  },
 ];
 
 const data = [
   {
-    key: '1',
-    index: '1',
-    itemname: 'A box of happiness',
+    key: "1",
+    index: "1",
+    itemname: "A box of happiness",
     costs: 200,
     quantity: 14,
-    price: '$2800'
+    price: "$2800",
   },
   {
-    key: '2',
-    index: '2',
-    itemname: 'Unicorn Tears',
+    key: "2",
+    index: "2",
+    itemname: "Unicorn Tears",
     costs: 500,
     quantity: 14,
-    price: '$7000'
+    price: "$7000",
   },
   {
-    key: '3',
-    index: '3',
-    itemname: 'Rainbow Machine',
+    key: "3",
+    index: "3",
+    itemname: "Rainbow Machine",
     costs: 700,
     quantity: 5,
-    price: '$3500'
-  }
+    price: "$3500",
+  },
 ];
 
 export default class Invoice extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
-    pagination: false
+    pagination: false,
   };
+
+  downloadInvoice() {
+    html2canvas(document.getElementById("downloadInvoice"), {
+      scrollX: 0,
+      scrollY: 0,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "PNG", 10, 10, 200, 200);
+      pdf.save("download.pdf");
+    });
+  }
 
   render() {
     return (
       <InvoicePageWrapper className="isoInvoicePageWrapper">
         <div className="isoPageHeader">
           <h1 className="isoPageTitle">Invoice</h1>
-          <Button type="primary" icon="printer">
+          <Button onClick={this.downloadInvoice} type="primary" icon="printer">
             Print Invoice
           </Button>
         </div>
 
-        <div className="isoPageContent">
+        <div id="downloadInvoice" className="isoPageContent">
           <div className="isoOrderInfo">
             <div className="isoLeftSideContent">
               <h3 className="isoTitle">Invoice Info</h3>
@@ -151,7 +169,9 @@ export default class Invoice extends React.Component {
 
           <div className="isoButtonWrapper">
             <Button type="primary">Send Invoice</Button>
-            <Button icon="printer">Print</Button>
+            <Button onClick={this.downloadInvoice} icon="printer">
+              Print
+            </Button>
           </div>
         </div>
       </InvoicePageWrapper>
